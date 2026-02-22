@@ -4,6 +4,7 @@ import { CayenneExpBuilder } from 'nhl-api-client';
 import { getClient } from '../client.js';
 import { formatTeamStatsReport } from '../formatters/stats-api.js';
 import { handleError } from '../utils/errors.js';
+import { validateCayenneExp } from '../utils/helpers.js';
 
 export function registerTeamStatsReportTool(server: McpServer): void {
   server.tool(
@@ -20,7 +21,9 @@ export function registerTeamStatsReportTool(server: McpServer): void {
     },
     async (args) => {
       try {
-        let cayenneExp = args.cayenne_exp;
+        let cayenneExp = args.cayenne_exp
+          ? validateCayenneExp(args.cayenne_exp)
+          : undefined;
 
         if (!cayenneExp) {
           const builder = new CayenneExpBuilder();

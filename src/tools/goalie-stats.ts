@@ -4,6 +4,7 @@ import { CayenneExpBuilder } from 'nhl-api-client';
 import { getClient } from '../client.js';
 import { formatGoalieStats, formatMilestones } from '../formatters/stats-api.js';
 import { handleError } from '../utils/errors.js';
+import { validateTeamAbbrev, validateCayenneExp } from '../utils/helpers.js';
 
 export function registerGoalieStatsTool(server: McpServer): void {
   server.tool(
@@ -23,7 +24,9 @@ export function registerGoalieStatsTool(server: McpServer): void {
     },
     async (args) => {
       try {
-        let cayenneExp = args.cayenne_exp;
+        let cayenneExp = args.cayenne_exp
+          ? validateCayenneExp(args.cayenne_exp)
+          : undefined;
 
         if (!cayenneExp) {
           const builder = new CayenneExpBuilder();
@@ -31,7 +34,8 @@ export function registerGoalieStatsTool(server: McpServer): void {
           builder.gameTypeId(args.game_type ?? 2);
           if (args.min_games) builder.gamesPlayed('>=', args.min_games);
           if (args.team) {
-            builder.raw(`teamAbbrevs="${args.team}"`);
+            const team = validateTeamAbbrev(args.team);
+            builder.raw(`teamAbbrevs="${team}"`);
           }
           cayenneExp = builder.build();
         }
