@@ -53,3 +53,34 @@ export function pctg(value: number | undefined): string {
   if (value === undefined || value === null) return '-';
   return (value * 100).toFixed(1) + '%';
 }
+
+const TEAM_ABBREV_RE = /^[A-Z]{3}$/;
+
+export function validateTeamAbbrev(team: string): string {
+  const upper = team.toUpperCase();
+  if (!TEAM_ABBREV_RE.test(upper)) {
+    throw new Error(`Invalid team abbreviation: ${team}. Expected 3 uppercase letters (e.g., TOR, EDM, NYR).`);
+  }
+  return upper;
+}
+
+const SEASON_RE = /^\d{8}$/;
+
+export function validateSeason(season: string): string {
+  if (!SEASON_RE.test(season)) {
+    throw new Error(`Invalid season format: ${season}. Expected 8 digits (e.g., 20242025).`);
+  }
+  return season;
+}
+
+const CAYENNE_SAFE_RE = /^[a-zA-Z0-9\s=<>!."'(),\-_+*/%]+$/;
+
+export function validateCayenneExp(exp: string): string {
+  if (!CAYENNE_SAFE_RE.test(exp)) {
+    throw new Error('Invalid cayenneExp: contains disallowed characters.');
+  }
+  if (exp.length > 500) {
+    throw new Error('cayenneExp too long (max 500 characters).');
+  }
+  return exp;
+}

@@ -4,6 +4,7 @@ import { CayenneExpBuilder } from 'nhl-api-client';
 import { getClient } from '../client.js';
 import { formatSkaterStats, formatMilestones } from '../formatters/stats-api.js';
 import { handleError } from '../utils/errors.js';
+import { validateTeamAbbrev, validateCayenneExp } from '../utils/helpers.js';
 
 export function registerSkaterStatsTool(server: McpServer): void {
   server.tool(
@@ -24,7 +25,9 @@ export function registerSkaterStatsTool(server: McpServer): void {
     },
     async (args) => {
       try {
-        let cayenneExp = args.cayenne_exp;
+        let cayenneExp = args.cayenne_exp
+          ? validateCayenneExp(args.cayenne_exp)
+          : undefined;
 
         if (!cayenneExp) {
           const builder = new CayenneExpBuilder();
@@ -33,7 +36,8 @@ export function registerSkaterStatsTool(server: McpServer): void {
           if (args.position) builder.position(args.position);
           if (args.min_games) builder.gamesPlayed('>=', args.min_games);
           if (args.team) {
-            builder.raw(`teamAbbrevs="${args.team}"`);
+            const team = validateTeamAbbrev(args.team);
+            builder.raw(`teamAbbrevs="${team}"`);
           }
           cayenneExp = builder.build();
         }
