@@ -1,0 +1,55 @@
+{
+  "name": "nhl-api-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for NHL statistics — lets AI assistants answer hockey questions using real-time data from both NHL APIs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "nhl-api-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jakubsvobodacz/nhl-api-mcp.git"
+  },
+  "keywords": [
+    "nhl",
+    "hockey",
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "stats",
+    "standings",
+    "scores"
+  ],
+  "author": "Jakub Svoboda",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jakubsvobodacz/nhl-api-mcp/issues"
+  },
+  "homepage": "https://github.com/jakubsvobodacz/nhl-api-mcp#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "nhl-api-client": "file:../nhl-stats-client",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
