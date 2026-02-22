@@ -1,9 +1,5 @@
-interface LocalizedName {
-  default: string;
-  [key: string]: string | undefined;
-}
-
-export function name(n: LocalizedName | string | undefined): string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function name(n: any): string {
   if (!n) return '';
   if (typeof n === 'string') return n;
   return n.default ?? '';
